@@ -1,118 +1,139 @@
-# Ex7 Removal of Nodes with a Specific Value from a Linked List
-
+# Ex6 Right Rotation LinkedList
+## DATE:
 ## AIM:
-To write a java  program that removes all nodes from a linked list whose value matches a given integer (val) and returns the new head of the modified linked list.
-
+To write a Java  program to:
+Create a singly linked list.
+Rotate the linked list to the right by k positions.
+Display the rotated linked list.
 ## Algorithm
-1. Create a dummy node that points to the head of the linked list to easily handle edge cases where the head node itself needs to be removed.
-2. Initialize a current pointer to point to the dummy node.
-3. Traverse the linked list using a loop that continues as long as current.next is not null.
-4. Check the next node's value: If current.next.val equals the given integer val, skip the node by setting current.next = current.next.next. Otherwise, advance the current pointer to current.next.
-5. Return the new head of the modified linked list, which is located at dummy.next.
-
+1. Calculate the length (\(n\)) of the linked list by traversing it while keeping track of the tail node.
+2. Handle base cases: If the list is empty (head == null), contains only one node (head.next == null), or \(k = 0\), return the head immediately.
+3. Optimize \(k\): Update \(k = k \pmod n\). If \(k = 0\) after this operation, no rotation is needed; return the original head.
+4. Form a loop: Connect the tail node's next pointer to the original head node, making the list circular.
+5. Locate the new split point: Traverse \(n - k\) steps from the original head to find the new tail node of the rotated list.
+6. Break the loop: Set the head to newTail.next, and then set newTail.next = null to terminate the circular connection.
 
 ## Program:
 ```
 /*
-program that removes all nodes from a linked list whose value matches a given integer (val) and returns the new head of the modified linked list.
+Program to  Right Rotation LinkedList
 Developed by: Rithika K
 RegisterNumber: 212224230230
 */
 ```
 
-
 ```
 
 import java.util.Scanner;
 
-public class RemoveLinkedListElements {
-    
-    // Nested static class so it belongs to RemoveLinkedListElements
-    static class ListNode {
-        int val;
-        ListNode next;
-        
-        ListNode(int val) {
-            this.val = val;
-            this.next = null;
-        }
-    }
-    
-    // Method to remove all elements matching the target value
-    public static ListNode removeElements(ListNode head, int val) {
-        ListNode dummy = new ListNode(0);
-        dummy.next = head;
-        ListNode current = dummy;
-        
-        while (current.next != null) {
-            if (current.next.val == val) {
-                current.next = current.next.next;
-            } else {
-                current = current.next;
-            }
-        }
-        return dummy.next;
+public class Node {
+    int data;
+    Node next;
+
+    // Constructor for individual nodes
+    Node(int data) {
+        this.data = data;
+        this.next = null;
     }
 
-    // Helper method to print the linked list
-    public static void printList(ListNode head) {
+    private static Node head = null;
+    private static Node tail = null;
+
+    // Method to add a new node to the linked list
+    public static void insert(int data) {
+        Node newNode = new Node(data);
         if (head == null) {
-            System.out.println("Empty List (null)");
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+        }
+    }
+
+    // Method to rotate the linked list to the right by k positions
+    public static void rotateRight(int k) {
+        if (head == null || head.next == null || k == 0) {
             return;
         }
-        ListNode current = head;
+
+        // 1. Calculate length and find the tail node
+        Node current = head;
+        int length = 1;
+        while (current.next != null) {
+            current = current.next;
+            length++;
+        }
+
+        // 2. Adjust k if it exceeds the length
+        k = k % length;
+        if (k == 0) {
+            return;
+        }
+
+        // 3. Connect tail to head to form a loop
+        current.next = head;
+
+        // 4. Find the new tail node at position (length - k)
+        int stepsToNewTail = length - k;
+        Node newTail = head;
+        for (int i = 1; i < stepsToNewTail; i++) {
+            newTail = newTail.next;
+        }
+
+        // 5. Update head and break the circular connection
+        head = newTail.next;
+        newTail.next = null;
+    }
+
+    // Method to display the linked list
+    public static void display() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        Node current = head;
         while (current != null) {
-            System.out.print(current.val + " -> ");
+            System.out.print(current.data + " -> ");
             current = current.next;
         }
         System.out.println("null");
     }
 
+    // Main method is now inside the Node class to fix your error
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
-        System.out.print("Enter the number of nodes: ");
+
+        System.out.print("Enter the number of elements in the linked list: ");
         int n = scanner.nextInt();
-        
-        ListNode head = null;
-        ListNode tail = null;
-        
-        if (n > 0) {
-            System.out.println("Enter the values for the nodes:");
-            for (int i = 0; i < n; i++) {
-                int value = scanner.nextInt();
-                ListNode newNode = new ListNode(value);
-                
-                if (head == null) {
-                    head = newNode;
-                    tail = newNode;
-                } else {
-                    tail.next = newNode;
-                    tail = newNode;
-                }
-            }
+
+        System.out.println("Enter the elements:");
+        for (int i = 0; i < n; i++) {
+            insert(scanner.nextInt());
         }
-        
-        System.out.print("Enter the value to remove: ");
-        int targetValue = scanner.nextInt();
-        
-        System.out.print("\nOriginal List: ");
-        printList(head);
-        
-        head = removeElements(head, targetValue);
-        
-        System.out.print("Modified List: ");
-        printList(head);
-        
+
+        System.out.print("Enter the number of positions to rotate (k): ");
+        int k = scanner.nextInt();
+
+        System.out.println("\nOriginal Linked List:");
+        display();
+
+        rotateRight(k);
+
+        System.out.println("\nRotated Linked List:");
+        display();
+
         scanner.close();
     }
 }
 
 ```
+
 ## Output:
 
-<img width="640" height="492" alt="image" src="https://github.com/user-attachments/assets/95dc702e-4a8c-4f6d-849d-08ffd2d59f26" />
+<img width="671" height="630" alt="image" src="https://github.com/user-attachments/assets/e1886a6f-13fd-4538-b811-0d98ebca3786" />
+
 
 
 ## Result:
-The java program successfully removes all nodes with the specified value (val) from the linked list and returns the new head.
+Thus, the C program to perfom right rotation on linked list is implemented successfully.
