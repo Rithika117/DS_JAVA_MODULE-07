@@ -1,132 +1,96 @@
 # Ex8 Detection of Cycle and Finding the Starting Node in a Linked List
-
+date:13/08/2026
 ## AIM:
 To write a program that detects a cycle in a linked list and returns the node where the cycle begins.
 If there is no cycle, the program should return null without modifying the linked list.
 ## Algorithm
-1. Initialize two pointers, slow and fast, at the head of the linked list.
-2. Move the pointers through the list: advance slow by one node and fast by two nodes in each iteration.
-3. Check for termination: if fast or fast.next becomes null, the list contains no cycle, so return null.
-4. Detect the cycle: if slow and fast meet at the same node, a cycle exists in the linked list.
-5. Find the start of the cycle: reset the slow pointer back to the head of the list, while keeping the fast pointer at the meeting node.
-6. Advance both pointers one node at a time simultaneously until they meet again.
-7. Return the meeting node, which is the exact starting node of the cycle.
+1.Start slow = head and fast = head.
+
+2.Move slow by 1 step and fast by 2 steps until they meet or fast becomes null.
+
+3.If fast becomes null, return null (no cycle).
+
+4.Move slow to head, keep fast at meeting point.
+
+5.Move both one step at a time until they meet — this node is the cycle start.
 
 
 ## Program:
 ```
-/*
+ /*
 program that detects a cycle in a linked list and returns the node where the cycle begins.
 If there is no cycle, the program should return null without modifying the linked list.
-Developed by: Rithika K
-RegisterNumber: 212224230230
+Developed by: DHARSHINI S N
+RegisterNumber: 212224230062
+
 */
-```
+class DetectCycle {
 
-```
-import java.util.Scanner;
-import java.util.HashMap;
+    static class Node {
+        int data;
+        Node next;
 
-class ListNode {
-    int val;
-    ListNode next;
-    ListNode(int x) {
-        val = x;
-        next = null;
-    }
-}
-
-public class Main {
-    // Method to detect cycle and return the starting node
-    public static ListNode detectCycle(ListNode head) {
-        if (head == null || head.next == null) {
-            return null;
+        Node(int data) {
+            this.data = data;
+            this.next = null;
         }
+    }
 
-        ListNode slow = head;
-        ListNode fast = head;
+    static Node detectCycle(Node head) {
+        if (head == null || head.next == null) 
+            return null;
 
-        // Step 1: Detect if a cycle exists
+        Node slow = head;
+        Node fast = head;
+
         while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
+            slow = slow.next;          
+            fast = fast.next.next;     
 
-            if (slow == fast) {
-                // Step 2: Find the starting node of the cycle
-                slow = head;
-                while (slow != fast) {
-                    slow = slow.next;
-                    fast = fast.next;
-                }
-                return slow; // Starting node of the cycle
+            if (slow == fast) {        
+                break;
             }
         }
 
-        return null; // No cycle found
+        if (fast == null || fast.next == null)
+            return null;
+
+        slow = head;
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        return slow;   
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter the number of nodes: ");
-        int n = scanner.nextInt();
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(3);
+        head.next.next.next = new Node(4);
+        head.next.next.next.next = new Node(5);
 
-        if (n <= 0) {
-            System.out.println("The list is empty. No cycle possible.");
-            scanner.close();
-            return;
-        }
+        head.next.next.next.next.next = head.next.next;
 
-        System.out.println("Enter the values of the nodes separated by spaces: ");
-        ListNode head = null;
-        ListNode tail = null;
-        
-        // Map to keep track of nodes by their 0-indexed position to create a cycle easily
-        HashMap<Integer, ListNode> nodeMap = new HashMap<>();
+        Node cycleStart = detectCycle(head);
 
-        for (int i = 0; i < n; i++) {
-            int value = scanner.nextInt();
-            ListNode newNode = new ListNode(value);
-            nodeMap.put(i, newNode);
-
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        System.out.print("Enter the 0-indexed position to connect the tail to (enter -1 for no cycle): ");
-        int cyclePos = scanner.nextInt();
-
-        // If cyclePos is valid, connect the tail node to that specific node
-        if (cyclePos >= 0 && cyclePos < n) {
-            tail.next = nodeMap.get(cyclePos);
-            System.out.println("Cycle successfully created linking tail back to node at index " + cyclePos);
-        } else {
-            System.out.println("No cycle created. The linked list is linear.");
-        }
-
-        // Run the algorithm
-        ListNode startNode = detectCycle(head);
-
-        // Output results
-        if (startNode != null) {
-            System.out.println("Cycle detected! The starting node of the cycle has a value of: " + startNode.val);
-        } else {
-            System.out.println("No cycle detected in the linked list.");
-        }
-
-        scanner.close();
+        if (cycleStart != null)
+            System.out.println("Cycle starts at node: " + cycleStart.data);
+        else
+            System.out.println("No cycle detected.");
     }
 }
-
+  
+*/
 ```
+
 ## Output:
 
-<img width="852" height="312" alt="image" src="https://github.com/user-attachments/assets/07f9f098-3fd3-4d6c-8e2d-5ad311c2a474" />
+<img width="798" height="175" alt="514427923-9d8d99fc-0ab8-4708-8517-3b5c6a2663a6" src="https://github.com/user-attachments/assets/9cf07013-1fb6-4b49-94e4-8696175c6272" />
+
+
 
 
 ## Result:
