@@ -1,5 +1,5 @@
 # Ex6 Right Rotation LinkedList
-##Date:13/08/2026
+# Date:13/08/2026
 ## AIM:
 To write a Java  program to:
 Create a singly linked list.
