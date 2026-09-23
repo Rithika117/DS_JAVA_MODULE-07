@@ -1,85 +1,84 @@
 # Ex9 Finding the Longest Length of Nested Set in a Permutation Array
-
+Date:13/08/2026
 ## AIM:
 To write a program that finds the length of the longest set s[k] defined as s[k] = { nums[k], nums[nums[k]], nums[nums[nums[k]]], … },where the iteration stops before a duplicate element occurs.
 
 The task is to return the maximum size among all such sets.
 ## Algorithm
-1. Initialize a variable max_length = 0 to store the maximum size of any nested set found.
-2. Iterate through each index i of the array from 0 to n - 1.
-3. Check if the current element at index i has been visited. If nums[i] is already marked (e.g., set to -1), skip it to avoid re-processing the same cycle.
-4. Traverse the cycle starting from index i. Keep track of the current cycle's length, and mark each visited element by changing its value to -1 until a previously visited element or a duplicate is encountered.
-5. Update max_length with the maximum of its current value and the length of the found cycle, then return max_length once all elements are checked.
+1.Create a visited array to mark elements already used in any set.
 
+2.For each index k, if it is not visited, start building the set S[k].
+
+3.Keep moving to nums[current], marking each element as visited.
+
+4.Count each step until you reach a visited element (duplicate).
+
+5.Update the maximum count found so far and return it.  
 
 ## Program:
 ```
 /*
-Program to find the Longest Length of Nested Set in a Permutation Array
-Developed by: Rithika K
-RegisterNumber: 212224230230
+program that removes all nodes from a linked list whose value matches a given integer (val) and returns the new head of the modified linked list.
+Developed by: DHARSHINI S N
+RegisterNumber: 212224230062
+
 */
-```
-
-```
-
 import java.util.Scanner;
 
-public class ArrayNesting {
+class LongestSet {
 
-    public static int arrayNesting(int[] nums) {
+    public static int longestSetLength(int[] nums) {
+        boolean[] visited = new boolean[nums.length];
         int maxLength = 0;
 
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != -1) {
-                int start = nums[i];
+            if (!visited[i]) {
                 int count = 0;
+                int current = i;
 
-                while (nums[start] != -1) {
-                    int temp = start;
-                    start = nums[start]; 
-                    nums[temp] = -1;     
-                    count++;             
+                while (!visited[current]) {
+                    visited[current] = true;
+                    current = nums[current];
+                    count++;
                 }
+
                 maxLength = Math.max(maxLength, count);
             }
         }
+
         return maxLength;
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enter the number of elements in the permutation array: ");
-        int n = scanner.nextInt();
+        System.out.print("Enter the array size: ");
+        int n = sc.nextInt();
 
         int[] nums = new int[n];
-        System.out.println("Enter the elements (numbers must strictly be between 0 and " + (n - 1) + "):");
-        
+
+      
+        System.out.println("Enter " + n + " elements:");
         for (int i = 0; i < n; i++) {
-            int input = scanner.nextInt();
-            
-            // Validation check to prevent the ArrayIndexOutOfBoundsException
-            if (input < 0 || input >= n) {
-                System.out.println("\nERROR: Value " + input + " is out of bounds! " +
-                                   "Elements must be between 0 and " + (n - 1) + ".");
-                System.exit(0); // Safely stop the program
-            }
-            
-            nums[i] = input;
+            nums[i] = sc.nextInt();
         }
 
-        int result = arrayNesting(nums);
-        System.out.println("\nThe maximum size among all nested sets is: " + result);
+        int result = longestSetLength(nums);
+        System.out.println("Maximum size of S[k] = " + result);
 
-        scanner.close();
+        sc.close();
     }
 }
 
+   
+*/
+
 ```
+
 ## Output:
 
-<img width="807" height="435" alt="image" src="https://github.com/user-attachments/assets/b2dc953c-2f1b-4d39-9fb8-e245514548e6" />
+
+<img width="435" height="89" alt="514428739-4eacad87-879a-439c-8de7-a72bb850f9c1" src="https://github.com/user-attachments/assets/37b9b1d0-0088-4984-a29c-6a4b13bee701" />
 
 
 ## Result:
